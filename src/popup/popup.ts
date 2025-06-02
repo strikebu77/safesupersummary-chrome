@@ -80,7 +80,6 @@ async function copyToClipboard() {
     await navigator.clipboard.writeText(currentSummary);
 
     // Show feedback
-    const originalText = elements.copyBtn.textContent;
     elements.copyBtn.textContent = "Copied!";
     elements.copyBtn.style.backgroundColor = "var(--primary-color)";
 
@@ -144,6 +143,7 @@ async function summarizeCurrentPage() {
       data: {
         text: response.text,
         length: settings.summaryLength || "medium",
+        language: settings.summaryLanguage,
       },
     });
 

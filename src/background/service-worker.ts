@@ -78,6 +78,7 @@ async function summarizeTab(tabId: number) {
     const summary = await OpenRouterAPI.summarize({
       text: response.text,
       length: settings.summaryLength || "medium",
+      language: settings.summaryLanguage,
     });
 
     // Store summary
@@ -105,7 +106,14 @@ async function summarizeTab(tabId: number) {
 
 async function handleSummarizeRequest(data: SummaryRequest) {
   try {
-    const summary = await OpenRouterAPI.summarize(data);
+    // Get user settings to include language preference
+    const settings = await Storage.getAll();
+    const requestWithLanguage = {
+      ...data,
+      language: data.language || settings.summaryLanguage,
+    };
+
+    const summary = await OpenRouterAPI.summarize(requestWithLanguage);
     return { success: true, summary };
   } catch (error) {
     return {

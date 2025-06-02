@@ -11,6 +11,9 @@ const elements = {
   summaryLengthSelect: document.getElementById(
     "summary-length",
   ) as HTMLSelectElement,
+  summaryLanguageSelect: document.getElementById(
+    "summary-language",
+  ) as HTMLSelectElement,
   themeSelect: document.getElementById("theme") as HTMLSelectElement,
   saveBtn: document.getElementById("save-btn") as HTMLButtonElement,
   resetBtn: document.getElementById("reset-btn") as HTMLButtonElement,
@@ -40,6 +43,10 @@ async function loadSettings() {
 
   if (settings.summaryLength) {
     elements.summaryLengthSelect.value = settings.summaryLength;
+  }
+
+  if (settings.summaryLanguage) {
+    elements.summaryLanguageSelect.value = settings.summaryLanguage;
   }
 
   if (settings.theme) {
@@ -91,6 +98,7 @@ async function saveSettings() {
       | "short"
       | "medium"
       | "long";
+    const summaryLanguage = elements.summaryLanguageSelect.value;
     const theme = elements.themeSelect.value as "light" | "dark" | "auto";
 
     // Validate API key format
@@ -107,6 +115,7 @@ async function saveSettings() {
       apiKey,
       model,
       summaryLength,
+      summaryLanguage,
       theme,
     });
 

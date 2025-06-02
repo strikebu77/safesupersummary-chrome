@@ -1,4 +1,4 @@
-import { OpenRouterResponse, SummaryRequest } from "./types";
+import { OpenRouterResponse, SummaryRequest, LANGUAGES } from "./types";
 import { Storage } from "./storage";
 
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
@@ -55,11 +55,26 @@ export class OpenRouterAPI {
       maxTokens = 1200;
     }
 
+    // Determine the target language for the summary
+    const targetLanguage =
+      request.language || settings.summaryLanguage || "auto";
+
+    // Get language name for the prompt
+    const languageInfo = LANGUAGES.find((lang) => lang.code === targetLanguage);
+    const languageName =
+      languageInfo?.name || "the same language as the original text";
+
     const systemPrompt = `You are an expert summarizer. Your job is to produce clear, concise, and accurate summaries that capture the essential information and intent of the original text, while remaining highly readable. Prioritize the main ideas, key arguments, and critical details. Avoid unnecessary repetition or filler. Write in fluent, natural language, and ensure the summary is useful for someone who has not read the original.
 
 The summary length should be proportional to the original text length - longer texts deserve more comprehensive summaries that preserve important details and context.`;
 
-    const userPrompt = `Summarize the following page content in approximately ${targetSentences} sentences. The original text has ${wordCount} words, so provide a proportionally detailed summary that captures the key information comprehensively:\n\n${request.text}`;
+    let userPrompt: string;
+
+    if (targetLanguage === "auto") {
+      userPrompt = `Summarize the following page content in approximately ${targetSentences} sentences. Write the summary in the same language as the original text. The original text has ${wordCount} words, so provide a proportionally detailed summary that captures the key information comprehensively:\n\n${request.text}`;
+    } else {
+      userPrompt = `Summarize the following page content in approximately ${targetSentences} sentences. Write the summary in ${languageName}. The original text has ${wordCount} words, so provide a proportionally detailed summary that captures the key information comprehensively:\n\n${request.text}`;
+    }
 
     try {
       const response = await fetch(OPENROUTER_API_URL, {

@@ -6,11 +6,45 @@ A production-ready Chrome Extension that uses AI to generate concise summaries o
 
 - 🤖 **AI-Powered Summaries**: Uses OpenRouter API to access multiple LLMs (GPT-4, Claude, Gemini, etc.)
 - 📏 **Adaptive Summary Length**: Automatically adjusts summary length based on original text size - short articles get concise summaries, long articles get comprehensive ones
+- 🌍 **Multi-Language Support**: Choose summary language or auto-detect from original content
 - 📝 **Smart Text Extraction**: Automatically detects and extracts main content from web pages
 - ⚡ **Quick Access**: Summarize via browser action, context menu, or popup
 - 🎨 **Modern UI**: Clean interface with dark/light mode support
-- ⚙️ **Customizable**: Choose AI model, summary length preference (concise/balanced/detailed), and theme
+- ⚙️ **Customizable**: Choose AI model, summary length preference (concise/balanced/detailed), language, and theme
 - 📋 **Copy to Clipboard**: Easy sharing of generated summaries
+
+## Language Support
+
+The extension supports summaries in multiple languages:
+
+### Supported Languages
+
+- **Auto (Original Language)**: Automatically detects and uses the same language as the source content
+- **English** - English
+- **Русский** - Russian
+- **Español** - Spanish
+- **Français** - French
+- **Deutsch** - German
+- **Italiano** - Italian
+- **Português** - Portuguese
+- **中文** - Chinese
+- **日本語** - Japanese
+- **한국어** - Korean
+- **العربية** - Arabic
+- **हिन्दी** - Hindi
+- **Türkçe** - Turkish
+- **Polski** - Polish
+- **Nederlands** - Dutch
+- **Svenska** - Swedish
+- **Dansk** - Danish
+- **Norsk** - Norwegian
+- **Suomi** - Finnish
+
+### How Language Selection Works
+
+1. **Auto Mode (Default)**: The AI automatically detects the language of the original content and generates the summary in the same language
+2. **Specific Language**: Choose any supported language to force summaries in that language, regardless of the source content language
+3. **Intelligent Translation**: When a specific language is selected, the AI not only translates but also adapts the summary to be natural and culturally appropriate for that language
 
 ## Adaptive Summary System
 
@@ -89,8 +123,10 @@ This ensures that:
 1. Click the extension icon and then the settings gear
 2. Enter your OpenRouter API key
 3. Select your preferred AI model
-4. Choose summary length preference
-5. Save settings
+4. Choose summary length preference (Concise/Balanced/Detailed)
+5. Select summary language (Auto for original language, or choose a specific language)
+6. Choose your preferred theme (Auto/Light/Dark)
+7. Save settings
 
 ### Usage Demo
 
