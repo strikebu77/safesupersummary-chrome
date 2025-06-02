@@ -16,13 +16,29 @@ const elements = {
   regenerateBtn: document.getElementById("regenerate-btn") as HTMLButtonElement,
   summarizeBtn: document.getElementById("summarize-btn") as HTMLButtonElement,
   settingsBtn: document.getElementById("settings-btn") as HTMLButtonElement,
+  toggleSettingsBtn: document.getElementById(
+    "toggle-settings-btn",
+  ) as HTMLButtonElement,
+  settingsPanel: document.getElementById("settings-panel") as HTMLDivElement,
+  popupModel: document.getElementById("popup-model") as HTMLSelectElement,
+  popupSummaryLength: document.getElementById(
+    "popup-summary-length",
+  ) as HTMLSelectElement,
+  popupSummaryLanguage: document.getElementById(
+    "popup-summary-language",
+  ) as HTMLSelectElement,
+  popupTheme: document.getElementById("popup-theme") as HTMLSelectElement,
 };
 
 // State
 let currentSummary: string | null = null;
+let settingsPanelOpen = false;
 
 // Initialize popup
 async function init() {
+  // Load settings first
+  await loadSettings();
+
   // Check if we have a current summary
   const response = await chrome.runtime.sendMessage({
     type: "GET_CURRENT_SUMMARY",
@@ -39,6 +55,81 @@ async function init() {
   elements.regenerateBtn.addEventListener("click", regenerateSummary);
   elements.summarizeBtn.addEventListener("click", summarizeCurrentPage);
   elements.settingsBtn.addEventListener("click", openOptions);
+  elements.toggleSettingsBtn.addEventListener("click", toggleSettingsPanel);
+
+  // Settings change listeners
+  elements.popupModel.addEventListener("change", saveSettings);
+  elements.popupSummaryLength.addEventListener("change", saveSettings);
+  elements.popupSummaryLanguage.addEventListener("change", saveSettings);
+  elements.popupTheme.addEventListener("change", (e) => {
+    saveSettings();
+    const theme = (e.target as HTMLSelectElement).value as
+      | "light"
+      | "dark"
+      | "auto";
+    applyTheme(theme);
+  });
+}
+
+// Load settings from storage
+async function loadSettings() {
+  const settings = await Storage.getAll();
+
+  if (settings.model) {
+    elements.popupModel.value = settings.model;
+  }
+
+  if (settings.summaryLength) {
+    elements.popupSummaryLength.value = settings.summaryLength;
+  }
+
+  if (settings.summaryLanguage) {
+    elements.popupSummaryLanguage.value = settings.summaryLanguage;
+  }
+
+  if (settings.theme) {
+    elements.popupTheme.value = settings.theme;
+    applyTheme(settings.theme);
+  }
+}
+
+// Save settings to storage
+async function saveSettings() {
+  try {
+    await Storage.setMultiple({
+      model: elements.popupModel.value,
+      summaryLength: elements.popupSummaryLength.value as
+        | "short"
+        | "medium"
+        | "long",
+      summaryLanguage: elements.popupSummaryLanguage.value,
+      theme: elements.popupTheme.value as "light" | "dark" | "auto",
+    });
+  } catch (error) {
+    console.error("Failed to save settings:", error);
+  }
+}
+
+// Apply theme
+function applyTheme(theme: "light" | "dark" | "auto") {
+  if (theme === "auto") {
+    document.documentElement.removeAttribute("data-theme");
+  } else {
+    document.documentElement.setAttribute("data-theme", theme);
+  }
+}
+
+// Toggle settings panel
+function toggleSettingsPanel() {
+  settingsPanelOpen = !settingsPanelOpen;
+
+  if (settingsPanelOpen) {
+    elements.settingsPanel.classList.remove("hidden");
+    elements.toggleSettingsBtn.classList.add("rotated");
+  } else {
+    elements.settingsPanel.classList.add("hidden");
+    elements.toggleSettingsBtn.classList.remove("rotated");
+  }
 }
 
 // Show different UI states

@@ -12,15 +12,82 @@
     <div class="container">
         <header>
             <h1>Page Summarizer</h1>
-            <button id="settings-btn" class="icon-btn" title="Settings">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="3"></circle>
-                    <path
-                        d="M12 1v6m0 6v6m9-9h-6m-6 0H3m16.24-6.36l-4.24 4.24m-6.12 6.12l-4.24 4.24m12.72 0l-4.24-4.24m-6.12-6.12L3.76 3.76">
-                    </path>
-                </svg>
-            </button>
+            <div class="header-actions">
+                <button id="toggle-settings-btn" class="icon-btn" title="Toggle Settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </button>
+                <button id="settings-btn" class="icon-btn" title="Open Full Settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path
+                            d="M12 1v6m0 6v6m9-9h-6m-6 0H3m16.24-6.36l-4.24 4.24m-6.12 6.12l-4.24 4.24m12.72 0l-4.24-4.24m-6.12-6.12L3.76 3.76">
+                        </path>
+                    </svg>
+                </button>
+            </div>
         </header>
+
+        <div id="settings-panel" class="settings-panel hidden">
+            <div class="settings-section">
+                <div class="form-group">
+                    <label for="popup-model">Model</label>
+                    <select id="popup-model">
+                        <option value="openai/gpt-4o">GPT-4o</option>
+                        <option value="openai/gpt-4o-mini">GPT-4o Mini</option>
+                        <option value="anthropic/claude-sonnet-4">Claude Sonnet 4</option>
+                        <option value="google/gemini-2.5-flash-preview-05-20">Google: Gemini 2.5 Flash Preview 05-20
+                        </option>
+                        <option value="x-ai/grok-3-beta">xAI: Grok 3 Beta</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="popup-summary-length">Summary Length</label>
+                    <select id="popup-summary-length">
+                        <option value="short">Concise</option>
+                        <option value="medium">Balanced</option>
+                        <option value="long">Detailed</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="popup-summary-language">Language</label>
+                    <select id="popup-summary-language">
+                        <option value="auto">Auto (Original)</option>
+                        <option value="en">English</option>
+                        <option value="ru">Русский</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                        <option value="de">Deutsch</option>
+                        <option value="it">Italiano</option>
+                        <option value="pt">Português</option>
+                        <option value="zh">中文</option>
+                        <option value="ja">日本語</option>
+                        <option value="ko">한국어</option>
+                        <option value="ar">العربية</option>
+                        <option value="hi">हिन्दी</option>
+                        <option value="tr">Türkçe</option>
+                        <option value="pl">Polski</option>
+                        <option value="nl">Nederlands</option>
+                        <option value="sv">Svenska</option>
+                        <option value="da">Dansk</option>
+                        <option value="no">Norsk</option>
+                        <option value="fi">Suomi</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="popup-theme">Theme</label>
+                    <select id="popup-theme">
+                        <option value="auto">Auto (System)</option>
+                        <option value="light">Light</option>
+                        <option value="dark">Dark</option>
+                    </select>
+                </div>
+            </div>
+        </div>
 
         <main>
             <div id="loading" class="loading hidden">

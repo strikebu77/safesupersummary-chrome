@@ -12,6 +12,31 @@ A production-ready Chrome Extension that uses AI to generate concise summaries o
 - 🎨 **Modern UI**: Clean interface with dark/light mode support
 - ⚙️ **Customizable**: Choose AI model, summary length preference (concise/balanced/detailed), language, and theme
 - 📋 **Copy to Clipboard**: Easy sharing of generated summaries
+- 🔧 **Quick Settings**: Access and modify all settings directly from the popup interface
+
+## Quick Settings in Popup
+
+The extension now features a convenient settings panel directly in the popup interface:
+
+### Accessing Quick Settings
+
+1. Click the extension icon to open the popup
+2. Click the dropdown arrow (⌄) next to the settings gear icon
+3. The settings panel will expand, showing all available options
+
+### Available Quick Settings
+
+- **Model Selection**: Choose between GPT-4o, GPT-4o Mini, Claude Sonnet 4, Gemini, and Grok 3 Beta
+- **Summary Length**: Select Concise, Balanced, or Detailed preferences
+- **Language**: Choose from 20+ supported languages or use Auto-detect
+- **Theme**: Switch between Auto (System), Light, or Dark themes
+
+### Benefits
+
+- **Instant Access**: No need to open the full settings page for common adjustments
+- **Real-time Changes**: Settings are saved automatically as you change them
+- **Theme Preview**: See theme changes applied immediately
+- **Compact Design**: Settings panel fits seamlessly within the popup interface
 
 ## Language Support
 
@@ -136,18 +161,25 @@ This ensures that:
    - Click "Summarize Current Page" button
    - Wait for the AI to generate the summary
 
-2. **Context menu:**
+2. **Quick settings adjustment:**
+
+   - Click the extension icon to open popup
+   - Click the dropdown arrow (⌄) to expand settings panel
+   - Adjust model, length, language, or theme as needed
+   - Settings are saved automatically
+
+3. **Context menu:**
 
    - Right-click anywhere on a webpage
    - Select "Summarize this page"
 
-3. **Visual feedback:**
+4. **Visual feedback:**
 
    - Badge shows "..." while processing
    - Green checkmark (✓) when summary is ready
    - Red exclamation (!) if an error occurs
 
-4. **Copy summary:**
+5. **Copy summary:**
    - Click "Copy to Clipboard" to share the summary
    - Button shows "Copied!" confirmation
 
