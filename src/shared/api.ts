@@ -21,7 +21,7 @@ export class OpenRouterAPI {
 
     const sentences = lengthMap[request.length];
 
-    const systemPrompt = `You are a world-class summarizer. Your task is to create clear, concise, and accurate summaries that capture the essential information while maintaining readability. Focus on the main points, key arguments, and important details.`;
+    const systemPrompt = `You are an expert summarizer. Your job is to produce clear, concise, and accurate summaries that capture the essential information and intent of the original text, while remaining highly readable. Prioritize the main ideas, key arguments, and critical details. Avoid unnecessary repetition or filler. Write in fluent, natural language, and ensure the summary is useful for someone who has not read the original.`;
 
     const userPrompt = `Summarize the following page content in approximately ${sentences} sentences. Be concise but comprehensive:\n\n${request.text}`;
 
