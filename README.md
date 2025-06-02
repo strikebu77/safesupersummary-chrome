@@ -5,11 +5,39 @@ A production-ready Chrome Extension that uses AI to generate concise summaries o
 ## Features
 
 - 🤖 **AI-Powered Summaries**: Uses OpenRouter API to access multiple LLMs (GPT-4, Claude, Gemini, etc.)
+- 📏 **Adaptive Summary Length**: Automatically adjusts summary length based on original text size - short articles get concise summaries, long articles get comprehensive ones
 - 📝 **Smart Text Extraction**: Automatically detects and extracts main content from web pages
 - ⚡ **Quick Access**: Summarize via browser action, context menu, or popup
 - 🎨 **Modern UI**: Clean interface with dark/light mode support
-- ⚙️ **Customizable**: Choose AI model, summary length, and theme
+- ⚙️ **Customizable**: Choose AI model, summary length preference (concise/balanced/detailed), and theme
 - 📋 **Copy to Clipboard**: Easy sharing of generated summaries
+
+## Adaptive Summary System
+
+The extension now features an intelligent summary length system that adapts to the original text size:
+
+### How it Works
+
+- **Very short texts** (< 200 words): 1-3 sentences
+- **Short texts** (200-500 words): 2-5 sentences
+- **Medium texts** (500-1000 words): 3-7 sentences
+- **Long texts** (1000-2000 words): 5-10 sentences
+- **Very long texts** (2000-5000 words): 8-15 sentences
+- **Extremely long texts** (5000+ words): 10-20 sentences
+
+### Length Preferences
+
+Your length preference (Concise/Balanced/Detailed) acts as a multiplier:
+
+- **Concise**: 20% shorter summaries
+- **Balanced**: Standard adaptive length
+- **Detailed**: 30% longer summaries
+
+This ensures that:
+
+- Short articles aren't over-summarized into meaningless fragments
+- Long articles get comprehensive summaries that preserve important details
+- User preferences are still respected across all text lengths
 
 ## How to Install & Test
 

@@ -13,17 +13,53 @@ export class OpenRouterAPI {
       );
     }
 
-    const lengthMap = {
-      short: 2,
-      medium: 4,
-      long: 8,
+    // Calculate adaptive summary length based on text length
+    const wordCount = request.text.split(/\s+/).length;
+
+    // Base multipliers for different length preferences
+    const lengthMultipliers = {
+      short: 0.8,
+      medium: 1.0,
+      long: 1.3,
     };
 
-    const sentences = lengthMap[request.length];
+    const multiplier = lengthMultipliers[request.length];
 
-    const systemPrompt = `You are an expert summarizer. Your job is to produce clear, concise, and accurate summaries that capture the essential information and intent of the original text, while remaining highly readable. Prioritize the main ideas, key arguments, and critical details. Avoid unnecessary repetition or filler. Write in fluent, natural language, and ensure the summary is useful for someone who has not read the original.`;
+    // Calculate adaptive sentence count based on text length
+    let targetSentences: number;
+    let maxTokens: number;
 
-    const userPrompt = `Summarize the following page content in approximately ${sentences} sentences. Be concise but comprehensive:\n\n${request.text}`;
+    if (wordCount < 200) {
+      // Very short text: 1-3 sentences
+      targetSentences = Math.max(1, Math.ceil(2 * multiplier));
+      maxTokens = 150;
+    } else if (wordCount < 500) {
+      // Short text: 2-5 sentences
+      targetSentences = Math.max(2, Math.ceil(3 * multiplier));
+      maxTokens = 250;
+    } else if (wordCount < 1000) {
+      // Medium text: 3-7 sentences
+      targetSentences = Math.max(3, Math.ceil(5 * multiplier));
+      maxTokens = 400;
+    } else if (wordCount < 2000) {
+      // Long text: 5-10 sentences
+      targetSentences = Math.max(4, Math.ceil(7 * multiplier));
+      maxTokens = 600;
+    } else if (wordCount < 5000) {
+      // Very long text: 8-15 sentences
+      targetSentences = Math.max(6, Math.ceil(12 * multiplier));
+      maxTokens = 900;
+    } else {
+      // Extremely long text: 10-20 sentences
+      targetSentences = Math.max(8, Math.ceil(16 * multiplier));
+      maxTokens = 1200;
+    }
+
+    const systemPrompt = `You are an expert summarizer. Your job is to produce clear, concise, and accurate summaries that capture the essential information and intent of the original text, while remaining highly readable. Prioritize the main ideas, key arguments, and critical details. Avoid unnecessary repetition or filler. Write in fluent, natural language, and ensure the summary is useful for someone who has not read the original.
+
+The summary length should be proportional to the original text length - longer texts deserve more comprehensive summaries that preserve important details and context.`;
+
+    const userPrompt = `Summarize the following page content in approximately ${targetSentences} sentences. The original text has ${wordCount} words, so provide a proportionally detailed summary that captures the key information comprehensively:\n\n${request.text}`;
 
     try {
       const response = await fetch(OPENROUTER_API_URL, {
@@ -47,7 +83,7 @@ export class OpenRouterAPI {
             },
           ],
           temperature: 0.3,
-          max_tokens: 500,
+          max_tokens: maxTokens,
         }),
       });
 

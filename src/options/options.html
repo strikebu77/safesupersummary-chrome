@@ -56,14 +56,18 @@
 
             <section class="settings-section">
                 <h2>Summary Preferences</h2>
+                <p class="description">Summary length automatically adapts to the original text length. These settings
+                    control the relative verbosity.</p>
 
                 <div class="form-group">
                     <label for="summary-length">Summary Length</label>
                     <select id="summary-length">
-                        <option value="short">Short (2-3 sentences)</option>
-                        <option value="medium">Medium (4-5 sentences)</option>
-                        <option value="long">Long (7-8 sentences)</option>
+                        <option value="short">Concise (Shorter adaptive summaries)</option>
+                        <option value="medium">Balanced (Standard adaptive summaries)</option>
+                        <option value="long">Detailed (Longer adaptive summaries)</option>
                     </select>
+                    <p class="help-text">Length automatically scales with text size: short articles get brief summaries,
+                        long articles get comprehensive ones.</p>
                 </div>
 
                 <div class="form-group">
