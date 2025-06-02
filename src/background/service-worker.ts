@@ -2,8 +2,9 @@ import { Message, SummaryRequest } from "@/shared/types";
 import { Storage } from "@/shared/storage";
 import { OpenRouterAPI } from "@/shared/api";
 
-// Store current summary in memory
+// Store current summary and reading time in memory
 let currentSummary: string | null = null;
+let currentReadingTime: any = null;
 let currentTabId: number | null = null;
 
 // Initialize context menu
@@ -40,7 +41,10 @@ chrome.runtime.onMessage.addListener(
     }
 
     if (message.type === "GET_CURRENT_SUMMARY") {
-      sendResponse({ summary: currentSummary });
+      sendResponse({
+        summary: currentSummary,
+        readingTime: currentReadingTime,
+      });
     }
   },
 );
@@ -75,14 +79,15 @@ async function summarizeTab(tabId: number) {
     const settings = await Storage.getAll();
 
     // Generate summary
-    const summary = await OpenRouterAPI.summarize({
+    const result = await OpenRouterAPI.summarize({
       text: response.text,
       length: settings.summaryLength || "medium",
       language: settings.summaryLanguage,
     });
 
-    // Store summary
-    currentSummary = summary;
+    // Store summary and reading time
+    currentSummary = result.summary;
+    currentReadingTime = result.readingTime;
     currentTabId = tabId;
 
     // Update badge to show success
@@ -100,6 +105,7 @@ async function summarizeTab(tabId: number) {
 
     // Store error message
     currentSummary = null;
+    currentReadingTime = null;
     currentTabId = tabId;
   }
 }
@@ -113,8 +119,12 @@ async function handleSummarizeRequest(data: SummaryRequest) {
       language: data.language || settings.summaryLanguage,
     };
 
-    const summary = await OpenRouterAPI.summarize(requestWithLanguage);
-    return { success: true, summary };
+    const result = await OpenRouterAPI.summarize(requestWithLanguage);
+    return {
+      success: true,
+      summary: result.summary,
+      readingTime: result.readingTime,
+    };
   } catch (error) {
     return {
       success: false,

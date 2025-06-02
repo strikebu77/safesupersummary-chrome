@@ -1,10 +1,13 @@
 import { OpenRouterResponse, SummaryRequest, LANGUAGES } from "./types";
 import { Storage } from "./storage";
+import { ReadingTimeCalculator } from "./reading-time";
 
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 export class OpenRouterAPI {
-  static async summarize(request: SummaryRequest): Promise<string> {
+  static async summarize(
+    request: SummaryRequest,
+  ): Promise<{ summary: string; readingTime: any }> {
     const settings = await Storage.getAll();
 
     if (!settings.apiKey) {
@@ -120,7 +123,15 @@ The summary length should be proportional to the original text length - longer t
         throw new Error("No response from AI model");
       }
 
-      return data.choices[0].message.content.trim();
+      const summary = data.choices[0].message.content.trim();
+
+      // Calculate reading time information
+      const readingTime = ReadingTimeCalculator.calculateReadingTimeInfo(
+        request.text,
+        summary,
+      );
+
+      return { summary, readingTime };
     } catch (error) {
       if (error instanceof Error) {
         throw error;

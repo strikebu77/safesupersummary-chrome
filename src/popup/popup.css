@@ -170,6 +170,52 @@ main {
   word-wrap: break-word;
 }
 
+/* Reading Time Information */
+.reading-time-info {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.reading-time-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.reading-time-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.reading-time-label {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.reading-time-value {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.reading-time-saved {
+  border-top: 1px solid var(--border-color);
+  padding-top: 8px;
+  margin-top: 4px;
+}
+
+.reading-time-saved .reading-time-label {
+  color: var(--primary-color);
+}
+
+.reading-time-saved .reading-time-value {
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
 .actions {
   display: flex;
   gap: 8px;

@@ -1,4 +1,5 @@
 import { Storage } from "@/shared/storage";
+import { ReadingTimeCalculator } from "@/shared/reading-time";
 
 // DOM elements
 const elements = {
@@ -11,6 +12,10 @@ const elements = {
     "summary-container",
   ) as HTMLDivElement,
   summaryText: document.getElementById("summary-text") as HTMLDivElement,
+  readingTimeInfo: document.getElementById(
+    "reading-time-info",
+  ) as HTMLDivElement,
+  timeSaved: document.getElementById("time-saved") as HTMLSpanElement,
   noContent: document.getElementById("no-content") as HTMLDivElement,
   copyBtn: document.getElementById("copy-btn") as HTMLButtonElement,
   regenerateBtn: document.getElementById("regenerate-btn") as HTMLButtonElement,
@@ -45,7 +50,7 @@ async function init() {
   });
 
   if (response?.summary) {
-    showSummary(response.summary);
+    showSummary(response.summary, response.readingTime);
   } else {
     showNoContent();
   }
@@ -144,10 +149,22 @@ function showError(message: string) {
   elements.error.classList.remove("hidden");
 }
 
-function showSummary(summary: string) {
+function showSummary(summary: string, readingTime?: any) {
   hideAll();
   currentSummary = summary;
   elements.summaryText.textContent = summary;
+
+  // Display reading time information if available
+  if (readingTime) {
+    elements.timeSaved.textContent = ReadingTimeCalculator.formatTimeSaved(
+      readingTime.timeSavedMinutes,
+      readingTime.timeSavedPercentage,
+    );
+    elements.readingTimeInfo.style.display = "block";
+  } else {
+    elements.readingTimeInfo.style.display = "none";
+  }
+
   elements.summaryContainer.classList.remove("hidden");
 }
 
@@ -239,7 +256,7 @@ async function summarizeCurrentPage() {
     });
 
     if (summaryResponse.success) {
-      showSummary(summaryResponse.summary);
+      showSummary(summaryResponse.summary, summaryResponse.readingTime);
     } else {
       showError(summaryResponse.error || "Failed to generate summary");
     }

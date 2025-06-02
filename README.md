@@ -6,6 +6,7 @@ A production-ready Chrome Extension that uses AI to generate concise summaries o
 
 - 🤖 **AI-Powered Summaries**: Uses OpenRouter API to access multiple LLMs (GPT-4, Claude, Gemini, etc.)
 - 📏 **Adaptive Summary Length**: Automatically adjusts summary length based on original text size - short articles get concise summaries, long articles get comprehensive ones
+- ⏱️ **Reading Time Analysis**: Shows estimated reading time for original content vs summary, with time savings percentage
 - 🌍 **Multi-Language Support**: Choose summary language or auto-detect from original content
 - 📝 **Smart Text Extraction**: Automatically detects and extracts main content from web pages
 - ⚡ **Quick Access**: Summarize via browser action, context menu, or popup
@@ -13,6 +14,33 @@ A production-ready Chrome Extension that uses AI to generate concise summaries o
 - ⚙️ **Customizable**: Choose AI model, summary length preference (concise/balanced/detailed), language, and theme
 - 📋 **Copy to Clipboard**: Easy sharing of generated summaries
 - 🔧 **Quick Settings**: Access and modify all settings directly from the popup interface
+
+## Reading Time Analysis
+
+The extension now includes intelligent reading time analysis that helps you understand the time savings from using summaries:
+
+### What it Shows
+
+- **Time Saved**: Shows both absolute time saved and percentage reduction from reading the summary instead of the full content
+
+### How it Works
+
+- Uses an average reading speed of 180 words per minute (realistic for web content reading)
+- Accurately counts words in both original text and summary
+- Displays time in a user-friendly format (minutes for short content, hours and minutes for longer content)
+- Shows percentage savings to help you understand the efficiency gain
+
+### Example Display
+
+```
+Time saved: 6 min (75%)
+```
+
+This feature helps you:
+
+- **Understand the value** of using summaries for time management
+- **Make informed decisions** about when to read the full content vs the summary
+- **Track your reading efficiency** across different types of content
 
 ## Quick Settings in Popup
 

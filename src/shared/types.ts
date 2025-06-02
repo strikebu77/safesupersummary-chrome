@@ -1,3 +1,5 @@
+import { ReadingTimeInfo } from "./reading-time";
+
 export interface StorageData {
   apiKey?: string;
   model?: string;
@@ -14,6 +16,7 @@ export interface SummaryRequest {
 
 export interface SummaryResponse {
   summary: string;
+  readingTime?: ReadingTimeInfo;
   error?: string;
 }
 
