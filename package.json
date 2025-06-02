@@ -1,0 +1,28 @@
+{
+  "name": "page-summarizer",
+  "version": "1.0.0",
+  "description": "Chrome Extension to summarize web pages using OpenRouter AI",
+  "type": "module",
+  "scripts": {
+    "dev": "vite build --watch --mode development",
+    "build": "vite build --mode production && mv dist/src/popup/popup.html dist/ && mv dist/src/options/options.html dist/ && rm -rf dist/src",
+    "zip": "npm run build && cd dist && zip -r ../page-summarizer.zip .",
+    "lint": "eslint src/**/*.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.254",
+    "@types/node": "^20.10.5",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.10",
+    "vite-plugin-static-copy": "^1.0.0"
+  },
+  "dependencies": {
+    "@mozilla/readability": "^0.5.0",
+    "dompurify": "^3.0.8",
+    "jsdom": "^23.0.1"
+  }
+}
