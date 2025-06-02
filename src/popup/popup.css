@@ -57,9 +57,9 @@ body {
   line-height: 1.6;
   color: var(--text-primary);
   background-color: var(--bg-primary);
-  width: 400px;
+  width: 500px;
   min-height: 200px;
-  max-height: 600px;
+  /* max-height: 750px; */
 }
 
 .container {
@@ -165,7 +165,6 @@ main {
   padding: 16px;
   border-radius: 8px;
   border: 1px solid var(--border-color);
-  max-height: 400px;
   overflow-y: auto;
   white-space: pre-wrap;
   word-wrap: break-word;
