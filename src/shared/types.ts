@@ -16,6 +16,7 @@ export interface SummaryRequest {
 
 export interface SummaryResponse {
   summary: string;
+  tldr?: string;
   readingTime?: ReadingTimeInfo;
   error?: string;
 }

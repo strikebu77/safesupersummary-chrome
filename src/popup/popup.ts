@@ -11,6 +11,8 @@ const elements = {
   summaryContainer: document.getElementById(
     "summary-container",
   ) as HTMLDivElement,
+  tldrContainer: document.getElementById("tldr-container") as HTMLDivElement,
+  tldrText: document.getElementById("tldr-text") as HTMLDivElement,
   summaryText: document.getElementById("summary-text") as HTMLDivElement,
   readingTimeInfo: document.getElementById(
     "reading-time-info",
@@ -37,6 +39,7 @@ const elements = {
 
 // State
 let currentSummary: string | null = null;
+let currentTldr: string | null = null;
 let settingsPanelOpen = false;
 
 // Initialize popup
@@ -50,7 +53,7 @@ async function init() {
   });
 
   if (response?.summary) {
-    showSummary(response.summary, response.readingTime);
+    showSummary(response.summary, response.readingTime, response.tldr);
   } else {
     showNoContent();
   }
@@ -149,9 +152,19 @@ function showError(message: string) {
   elements.error.classList.remove("hidden");
 }
 
-function showSummary(summary: string, readingTime?: any) {
+function showSummary(summary: string, readingTime?: any, tldr?: string) {
   hideAll();
   currentSummary = summary;
+  currentTldr = tldr || null;
+
+  // Display TL;DR if available
+  if (tldr) {
+    elements.tldrText.textContent = tldr;
+    elements.tldrContainer.style.display = "block";
+  } else {
+    elements.tldrContainer.style.display = "none";
+  }
+
   elements.summaryText.textContent = summary;
 
   // Display reading time information if available
@@ -185,7 +198,17 @@ async function copyToClipboard() {
   if (!currentSummary) return;
 
   try {
-    await navigator.clipboard.writeText(currentSummary);
+    let textToCopy = "";
+
+    // Add TL;DR if available
+    if (currentTldr) {
+      textToCopy += `TL;DR: ${currentTldr}\n\n`;
+    }
+
+    // Add main summary
+    textToCopy += currentSummary;
+
+    await navigator.clipboard.writeText(textToCopy);
 
     // Show feedback
     elements.copyBtn.textContent = "Copied!";
@@ -256,7 +279,11 @@ async function summarizeCurrentPage() {
     });
 
     if (summaryResponse.success) {
-      showSummary(summaryResponse.summary, summaryResponse.readingTime);
+      showSummary(
+        summaryResponse.summary,
+        summaryResponse.readingTime,
+        summaryResponse.tldr,
+      );
     } else {
       showError(summaryResponse.error || "Failed to generate summary");
     }

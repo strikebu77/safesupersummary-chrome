@@ -170,6 +170,31 @@ main {
   word-wrap: break-word;
 }
 
+/* TL;DR Section */
+.tldr-container {
+  background-color: var(--bg-secondary);
+  border: 2px solid var(--primary-color);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+}
+
+.tldr-label {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--primary-color);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tldr-text {
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
 /* Reading Time Information */
 .reading-time-info {
   background-color: var(--bg-secondary);

@@ -5,6 +5,7 @@ A production-ready Chrome Extension that uses AI to generate concise summaries o
 ## Features
 
 - 🤖 **AI-Powered Summaries**: Uses OpenRouter API to access multiple LLMs (GPT-4, Claude, Gemini, etc.)
+- ⚡ **TL;DR Generation**: Automatically generates ultra-concise one-sentence summaries alongside detailed summaries
 - 📏 **Adaptive Summary Length**: Automatically adjusts summary length based on original text size - short articles get concise summaries, long articles get comprehensive ones
 - ⏱️ **Reading Time Analysis**: Shows estimated reading time for original content vs summary, with time savings percentage
 - 🌍 **Multi-Language Support**: Choose summary language or auto-detect from original content
@@ -12,8 +13,52 @@ A production-ready Chrome Extension that uses AI to generate concise summaries o
 - ⚡ **Quick Access**: Summarize via browser action, context menu, or popup
 - 🎨 **Modern UI**: Clean interface with dark/light mode support
 - ⚙️ **Customizable**: Choose AI model, summary length preference (concise/balanced/detailed), language, and theme
-- 📋 **Copy to Clipboard**: Easy sharing of generated summaries
+- 📋 **Copy to Clipboard**: Easy sharing of generated summaries with TL;DR included
 - 🔧 **Quick Settings**: Access and modify all settings directly from the popup interface
+
+## TL;DR Feature
+
+The extension now includes an intelligent TL;DR (Too Long; Didn't Read) feature that provides instant understanding of any content:
+
+### What is TL;DR?
+
+- **Ultra-concise summary**: A single sentence that captures the most essential point of the entire content
+- **Instant understanding**: Get the main takeaway without reading the full summary
+- **Dual AI processing**: Separate AI requests ensure both TL;DR and detailed summary are optimized for their purpose
+
+### How it Works
+
+1. **Dual Generation**: When you summarize content, the extension makes two separate AI requests:
+
+   - One for the detailed summary (adaptive length based on content)
+   - One specifically for the TL;DR (always one sentence)
+
+2. **Smart Display**: The TL;DR appears prominently above the main summary with distinctive styling
+
+3. **Language Consistency**: TL;DR respects your language settings, appearing in the same language as your summary preference
+
+### Visual Design
+
+- **Prominent placement**: TL;DR appears at the top with a green border and "TL;DR:" label
+- **Clear hierarchy**: Visually distinct from the main summary while maintaining design consistency
+- **Responsive layout**: Adapts to different themes (light/dark mode)
+
+### Copy Functionality
+
+When you copy the summary to clipboard, both TL;DR and the full summary are included:
+
+```
+TL;DR: [One sentence summary]
+
+[Full detailed summary]
+```
+
+### Benefits
+
+- **Quick scanning**: Instantly understand if the full content is worth your time
+- **Meeting preparation**: Get key points for discussions without reading everything
+- **Social sharing**: Perfect length for sharing the essence of articles
+- **Information triage**: Quickly categorize and prioritize content consumption
 
 ## Reading Time Analysis
 

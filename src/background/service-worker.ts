@@ -4,6 +4,7 @@ import { OpenRouterAPI } from "@/shared/api";
 
 // Store current summary and reading time in memory
 let currentSummary: string | null = null;
+let currentTldr: string | null = null;
 let currentReadingTime: any = null;
 let currentTabId: number | null = null;
 
@@ -43,6 +44,7 @@ chrome.runtime.onMessage.addListener(
     if (message.type === "GET_CURRENT_SUMMARY") {
       sendResponse({
         summary: currentSummary,
+        tldr: currentTldr,
         readingTime: currentReadingTime,
       });
     }
@@ -85,8 +87,15 @@ async function summarizeTab(tabId: number) {
       language: settings.summaryLanguage,
     });
 
+    // Generate TL;DR
+    const tldr = await OpenRouterAPI.generateTLDR(
+      response.text,
+      settings.summaryLanguage,
+    );
+
     // Store summary and reading time
     currentSummary = result.summary;
+    currentTldr = tldr;
     currentReadingTime = result.readingTime;
     currentTabId = tabId;
 
@@ -105,6 +114,7 @@ async function summarizeTab(tabId: number) {
 
     // Store error message
     currentSummary = null;
+    currentTldr = null;
     currentReadingTime = null;
     currentTabId = tabId;
   }
@@ -119,10 +129,19 @@ async function handleSummarizeRequest(data: SummaryRequest) {
       language: data.language || settings.summaryLanguage,
     };
 
+    // Generate main summary
     const result = await OpenRouterAPI.summarize(requestWithLanguage);
+
+    // Generate TL;DR
+    const tldr = await OpenRouterAPI.generateTLDR(
+      data.text,
+      requestWithLanguage.language,
+    );
+
     return {
       success: true,
       summary: result.summary,
+      tldr: tldr,
       readingTime: result.readingTime,
     };
   } catch (error) {

@@ -139,4 +139,84 @@ The summary length should be proportional to the original text length - longer t
       throw new Error("Failed to generate summary");
     }
   }
+
+  static async generateTLDR(text: string, language?: string): Promise<string> {
+    const settings = await Storage.getAll();
+
+    if (!settings.apiKey) {
+      throw new Error(
+        "API key not configured. Please set your OpenRouter API key in the extension options.",
+      );
+    }
+
+    // Determine the target language for the TL;DR
+    const targetLanguage = language || settings.summaryLanguage || "auto";
+
+    // Get language name for the prompt
+    const languageInfo = LANGUAGES.find((lang) => lang.code === targetLanguage);
+    const languageName =
+      languageInfo?.name || "the same language as the original text";
+
+    const systemPrompt = `You are an expert at creating ultra-concise TL;DR summaries. Your job is to distill the most essential point of any text into a single, clear sentence. Focus on the main takeaway, key conclusion, or most important information that someone absolutely needs to know.`;
+
+    let userPrompt: string;
+
+    if (targetLanguage === "auto") {
+      userPrompt = `Create a TL;DR summary of the following text in exactly ONE sentence. Write it in the same language as the original text. Capture the most essential point or main takeaway:\n\n${text}`;
+    } else {
+      userPrompt = `Create a TL;DR summary of the following text in exactly ONE sentence. Write it in ${languageName}. Capture the most essential point or main takeaway:\n\n${text}`;
+    }
+
+    try {
+      const response = await fetch(OPENROUTER_API_URL, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${settings.apiKey}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": chrome.runtime.getURL(""),
+          "X-Title": "Page Summarizer Extension",
+        },
+        body: JSON.stringify({
+          model: settings.model || "openai/gpt-4o-mini",
+          messages: [
+            {
+              role: "system",
+              content: systemPrompt,
+            },
+            {
+              role: "user",
+              content: userPrompt,
+            },
+          ],
+          temperature: 0.2,
+          max_tokens: 100,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          errorData.error?.message ||
+            `API request failed: ${response.statusText}`,
+        );
+      }
+
+      const data: OpenRouterResponse = await response.json();
+
+      if (data.error) {
+        throw new Error(data.error.message);
+      }
+
+      if (!data.choices || data.choices.length === 0) {
+        throw new Error("No response from AI model");
+      }
+
+      return data.choices[0].message.content.trim();
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error("Failed to generate TL;DR");
+    }
+  }
 }
