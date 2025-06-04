@@ -89,7 +89,7 @@ The summary length should be proportional to the original text length - longer t
           "X-Title": "Page Summarizer Extension",
         },
         body: JSON.stringify({
-          model: settings.model || "openai/gpt-4o-mini",
+          model: settings.model || "anthropic/claude-sonnet-4",
           messages: [
             {
               role: "system",
@@ -177,7 +177,7 @@ The summary length should be proportional to the original text length - longer t
           "X-Title": "Page Summarizer Extension",
         },
         body: JSON.stringify({
-          model: settings.model || "openai/gpt-4o-mini",
+          model: settings.model || "anthropic/claude-sonnet-4",
           messages: [
             {
               role: "system",
