@@ -8,7 +8,7 @@ let currentTldr: string | null = null;
 let currentReadingTime: any = null;
 let currentTabId: number | null = null;
 
-// Initialize context menu
+// Initialize context menu and sidePanel
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: "summarize-page",
@@ -24,14 +24,18 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   }
 });
 
-// Handle browser action clicks
-chrome.action.onClicked.addListener((tab) => {
+// Handle browser action clicks - open sidePanel
+chrome.action.onClicked.addListener(async (tab) => {
   if (tab.id) {
-    summarizeTab(tab.id);
+    // Open sidePanel
+    await chrome.sidePanel.open({ tabId: tab.id });
+
+    // Optionally auto-summarize current page
+    // await summarizeTab(tab.id);
   }
 });
 
-// Handle messages from content script and popup
+// Handle messages from content script and sidepanel
 chrome.runtime.onMessage.addListener(
   (message: Message, sender, sendResponse) => {
     if (message.type === "SUMMARIZE") {
@@ -103,8 +107,8 @@ async function summarizeTab(tabId: number) {
     await chrome.action.setBadgeText({ text: "✓", tabId });
     await chrome.action.setBadgeBackgroundColor({ color: "#4CAF50", tabId });
 
-    // Open popup to show summary
-    await chrome.action.openPopup();
+    // Open sidePanel to show summary
+    await chrome.sidePanel.open({ tabId });
   } catch (error) {
     console.error("Summarization error:", error);
 
@@ -117,6 +121,9 @@ async function summarizeTab(tabId: number) {
     currentTldr = null;
     currentReadingTime = null;
     currentTabId = tabId;
+
+    // Still open sidePanel to show error
+    await chrome.sidePanel.open({ tabId });
   }
 }
 

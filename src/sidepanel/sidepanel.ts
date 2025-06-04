@@ -27,14 +27,18 @@ const elements = {
     "toggle-settings-btn",
   ) as HTMLButtonElement,
   settingsPanel: document.getElementById("settings-panel") as HTMLDivElement,
-  popupModel: document.getElementById("popup-model") as HTMLSelectElement,
-  popupSummaryLength: document.getElementById(
-    "popup-summary-length",
+  sidepanelModel: document.getElementById(
+    "sidepanel-model",
   ) as HTMLSelectElement,
-  popupSummaryLanguage: document.getElementById(
-    "popup-summary-language",
+  sidepanelSummaryLength: document.getElementById(
+    "sidepanel-summary-length",
   ) as HTMLSelectElement,
-  popupTheme: document.getElementById("popup-theme") as HTMLSelectElement,
+  sidepanelSummaryLanguage: document.getElementById(
+    "sidepanel-summary-language",
+  ) as HTMLSelectElement,
+  sidepanelTheme: document.getElementById(
+    "sidepanel-theme",
+  ) as HTMLSelectElement,
 };
 
 // State
@@ -42,7 +46,7 @@ let currentSummary: string | null = null;
 let currentTldr: string | null = null;
 let settingsPanelOpen = false;
 
-// Initialize popup
+// Initialize sidepanel
 async function init() {
   // Load settings first
   await loadSettings();
@@ -66,10 +70,10 @@ async function init() {
   elements.toggleSettingsBtn.addEventListener("click", toggleSettingsPanel);
 
   // Settings change listeners
-  elements.popupModel.addEventListener("change", saveSettings);
-  elements.popupSummaryLength.addEventListener("change", saveSettings);
-  elements.popupSummaryLanguage.addEventListener("change", saveSettings);
-  elements.popupTheme.addEventListener("change", (e) => {
+  elements.sidepanelModel.addEventListener("change", saveSettings);
+  elements.sidepanelSummaryLength.addEventListener("change", saveSettings);
+  elements.sidepanelSummaryLanguage.addEventListener("change", saveSettings);
+  elements.sidepanelTheme.addEventListener("change", (e) => {
     saveSettings();
     const theme = (e.target as HTMLSelectElement).value as
       | "light"
@@ -77,6 +81,28 @@ async function init() {
       | "auto";
     applyTheme(theme);
   });
+
+  // Listen for tab changes to auto-summarize
+  chrome.tabs.onActivated.addListener(handleTabChange);
+  chrome.tabs.onUpdated.addListener(handleTabUpdate);
+}
+
+// Handle tab changes for auto-summarization
+async function handleTabChange() {
+  // Auto-summarize when tab changes (optional feature)
+  // You can enable this if you want automatic summarization
+  // await summarizeCurrentPage();
+}
+
+async function handleTabUpdate(
+  tabId: number,
+  changeInfo: chrome.tabs.TabChangeInfo,
+) {
+  if (changeInfo.status === "complete") {
+    // Auto-summarize when page loads (optional feature)
+    // You can enable this if you want automatic summarization
+    // await summarizeCurrentPage();
+  }
 }
 
 // Load settings from storage
@@ -84,19 +110,19 @@ async function loadSettings() {
   const settings = await Storage.getAll();
 
   if (settings.model) {
-    elements.popupModel.value = settings.model;
+    elements.sidepanelModel.value = settings.model;
   }
 
   if (settings.summaryLength) {
-    elements.popupSummaryLength.value = settings.summaryLength;
+    elements.sidepanelSummaryLength.value = settings.summaryLength;
   }
 
   if (settings.summaryLanguage) {
-    elements.popupSummaryLanguage.value = settings.summaryLanguage;
+    elements.sidepanelSummaryLanguage.value = settings.summaryLanguage;
   }
 
   if (settings.theme) {
-    elements.popupTheme.value = settings.theme;
+    elements.sidepanelTheme.value = settings.theme;
     applyTheme(settings.theme);
   }
 }
@@ -105,13 +131,13 @@ async function loadSettings() {
 async function saveSettings() {
   try {
     await Storage.setMultiple({
-      model: elements.popupModel.value,
-      summaryLength: elements.popupSummaryLength.value as
+      model: elements.sidepanelModel.value,
+      summaryLength: elements.sidepanelSummaryLength.value as
         | "short"
         | "medium"
         | "long",
-      summaryLanguage: elements.popupSummaryLanguage.value,
-      theme: elements.popupTheme.value as "light" | "dark" | "auto",
+      summaryLanguage: elements.sidepanelSummaryLanguage.value,
+      theme: elements.sidepanelTheme.value as "light" | "dark" | "auto",
     });
   } catch (error) {
     console.error("Failed to save settings:", error);

@@ -12,7 +12,7 @@ export default defineConfig({
           "src/background/service-worker.ts",
         ),
         "content-script": resolve(__dirname, "src/content/content-script.ts"),
-        popup: resolve(__dirname, "src/popup/popup.html"),
+        sidepanel: resolve(__dirname, "src/sidepanel/sidepanel.html"),
         options: resolve(__dirname, "src/options/options.html"),
       },
       output: {

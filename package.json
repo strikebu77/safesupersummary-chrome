@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite build --watch --mode development",
-    "build": "vite build --mode production && mv dist/src/popup/popup.html dist/ && mv dist/src/options/options.html dist/ && rm -rf dist/src",
+    "build": "vite build --mode production && mv dist/src/sidepanel/sidepanel.html dist/sidepanel.html && mv dist/src/options/options.html dist/ && rm -rf dist/src",
     "zip": "npm run build && cd dist && zip -r ../page-summarizer.zip .",
     "lint": "eslint src/**/*.ts",
     "type-check": "tsc --noEmit"
